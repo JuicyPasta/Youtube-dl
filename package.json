@@ -1,0 +1,23 @@
+{
+  "name": "youtube-dl",
+  "version": "1.0.0",
+  "description": "Simple youtube video/audio downloader",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JuicyPasta/Youtube-dl.git"
+  },
+  "author": "Jackson Darrow and Brandon Hoang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JuicyPasta/Youtube-dl/issues"
+  },
+  "homepage": "https://github.com/JuicyPasta/Youtube-dl#readme",
+  "dependencies": {
+    "start-stop-daemon": "^0.1.1",
+    "ytdl-core": "^0.5.1"
+  }
+}
