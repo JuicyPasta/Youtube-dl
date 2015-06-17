@@ -16,5 +16,4 @@ if [ $OSTYPE = "darwin14" ]; then
 	npm install ~/Youtube-dl
 	node ~/Youtube-dl start
 
-
 fi
