@@ -32,28 +32,27 @@ startStopDaemon(function() {
         console.log("title: " + title);
         console.log("link: " + link);
 
-        var options = {
-            filter: filter || 'audioonly',
-        };
 
-        ytdl.getInfo(link, function(err, info){
+        ytdl.getInfo(link, { downloadURL: true }, function(err, info){
             if (err){
                 console.log('there was an error');
                 res.writeHead(500);
                 return res.end("This url is not valid");
             }
-            //console.log(info);
             title = title || info.title;
             // var thumbnailurl = thumbnail_url;
 
-            var downloadPipe = ytdl.downloadFromInfo(info, options)
+
+            var downloadPipe = ytdl.downloadFromInfo(info, {
+                filter: function(format) { return true; }
+                // filter: 'audioonly'
+            })
             .on('error', function(err){
                 downloadPipe.unpipe();
                 res.writeHead(500, {'Content-Type': 'text/html'});
                 return res.end("There was a problem downloading the video: " + title);
             })
             .on('format', function(format){
-                console.log(format);
 
                 downloadPipe
                 .on('end', function(){ // TRIGGERED when done
