@@ -6,13 +6,21 @@ var startStopDaemon = require('start-stop-daemon'); //https://www.npmjs.com/pack
 var url = require('url');
 var path = require('path');
 
-var options = {
+var httpsOptions = {
     key: fs.readFileSync('./tls/key.pem'),
     cert: fs.readFileSync('./tls/cert.pem')
 };
+var infoOptions = {
+    downloadURL: true
+};
+var downloadOptions = {
+    //filter: function(format) { return true; }
+    filter: 'audioonly'
+};
+
 
 startStopDaemon(function() {
-    https.createServer(options, function (req, res) {
+    https.createServer(httpsOptions, function (req, res) {
         var query = url.parse(req.url, true).query;
 
         var destination = (query.destination) ? path.normalize(query.destination) : null,
@@ -32,8 +40,7 @@ startStopDaemon(function() {
         console.log("title: " + title);
         console.log("link: " + link);
 
-
-        ytdl.getInfo(link, { downloadURL: true }, function(err, info){
+        ytdl.getInfo(link, infoOptions, function(err, info){
             if (err){
                 console.log('there was an error');
                 res.writeHead(500);
@@ -42,18 +49,13 @@ startStopDaemon(function() {
             title = title || info.title;
             // var thumbnailurl = thumbnail_url;
 
-
-            var downloadPipe = ytdl.downloadFromInfo(info, {
-                filter: function(format) { return true; }
-                // filter: 'audioonly'
-            })
+            var downloadPipe = ytdl.downloadFromInfo(info, downloadOptions)
             .on('error', function(err){
                 downloadPipe.unpipe();
                 res.writeHead(500, {'Content-Type': 'text/html'});
                 return res.end("There was a problem downloading the video: " + title);
             })
             .on('format', function(format){
-
                 downloadPipe
                 .on('end', function(){ // TRIGGERED when done
                     console.log('done with: ' + title);
