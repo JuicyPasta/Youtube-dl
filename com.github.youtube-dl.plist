@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.github.youtube-dl</string>
+  <key>KeepAlive</key>
+  <true/>
+  <key>ProgramArguments</key>
+  <array>
+    <string>node</string>
+    <string>/Library/Youtube-dl/app.js</string>
+    <string>start</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+
+  <key>StartInterval</key>
+  <integer>3523</integer>
+
+  <key>WorkingDirectory</key>
+  <string>/Library/Youtube-dl</string>
+
+  <key>StandardErrorPath</key>
+  <string>~/Desktop/error.txt</string>
+  <key>StandardOutPath</key>
+  <string>~/Desktop/output.txt</string>
+
+</dict>
+</plist>

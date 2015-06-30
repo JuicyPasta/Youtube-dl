@@ -2,7 +2,6 @@
 var https = require('https');
 var fs = require('fs');
 var ytdl = require('ytdl-core'); //https://www.npmjs.com/package/ytdl-core
-var startStopDaemon = require('start-stop-daemon'); //https://www.npmjs.com/package/start-stop-daemon
 var url = require('url');
 var path = require('path');
 var ffmpeg = require('fluent-ffmpeg');
@@ -12,9 +11,6 @@ var httpsOptions = {
     key: fs.readFileSync('./tls/key.pem'),
     cert: fs.readFileSync('./tls/cert.pem')
 };
-
-
-
 
 var server = function (port) { https.createServer(httpsOptions, function (req, res) {
     process.on('uncaughtException', function (err) {
@@ -102,8 +98,6 @@ var server = function (port) { https.createServer(httpsOptions, function (req, r
 
                 var converter = child_process.spawn('ffmpeg', ['-i', 'pipe:0', '-q:a', '0', '-map', 'a', location]);
 
-
-
                 converter.stderr.pipe(process.stdout);
 
                 this.on('end', function() {
@@ -133,4 +127,3 @@ var server = function (port) { https.createServer(httpsOptions, function (req, r
 }).listen(port);};
 
 server(6299);
-//startStopDaemon(server(6299));

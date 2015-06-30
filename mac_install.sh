@@ -1,9 +1,11 @@
 if [ $OSTYPE = "darwin14" ]; then
     echo "Installing dependencies on MacOS"
-    
-    if ! which brew; then 
-        echo "installing homebrew package manager"
-        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+    if ! which brew; then
+        echo "Installing homebrew package manager"
+        yes | ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    else
+        echo "Homebrew is already installed"
     fi
 
     for pkg in node ffmpeg git; do
@@ -12,14 +14,21 @@ if [ $OSTYPE = "darwin14" ]; then
         else
             echo "Package '$pkg' is not installed"
             echo "Installing package '$pkg'"
-            brew install $pkg
+            yes | brew install $pkg
         fi
     done
 
-    echo "Installing server"
+    echo "Installing server in /Library/Youtube-dl"
+
+    cd ~/
+    git clone https://github.com/JuicyPasta/Youtube-dl.git ./Youtube-dl
+    cd ./Youtube-dl
+    npm install
 
     echo "Configuring launchd"
+    mv com.github.youtube-dl.plist /Library/LaunchAgents/com.github.youtube-dl.plist
 
+    curl -k https://localhost:6299/ping
 
 else
     echo "This is not MacOS, please use the correct installer."
