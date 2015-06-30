@@ -2,29 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+
   <key>Label</key>
   <string>com.github.youtube-dl</string>
+
   <key>KeepAlive</key>
   <true/>
+
   <key>ProgramArguments</key>
   <array>
-    <string>node</string>
-    <string>/Library/Youtube-dl/app.js</string>
-    <string>start</string>
+    <string>/opt/Youtube-dl/youtube-dl-startup.sh</string>
   </array>
+
   <key>RunAtLoad</key>
   <true/>
-
   <key>StartInterval</key>
   <integer>3523</integer>
 
   <key>WorkingDirectory</key>
-  <string>/Library/Youtube-dl</string>
+  <string>/opt/Youtube-dl</string>
 
   <key>StandardErrorPath</key>
-  <string>~/Desktop/error.txt</string>
+  <string>/Users/jackson/Desktop/error.txt</string>
   <key>StandardOutPath</key>
-  <string>~/Desktop/output.txt</string>
+  <string>/Users/jackson/Desktop/output.txt</string>
 
 </dict>
 </plist>

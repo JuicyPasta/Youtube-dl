@@ -18,15 +18,20 @@ if [ $OSTYPE = "darwin14" ]; then
         fi
     done
 
-    echo "Installing server in /Library/Youtube-dl"
+    echo "Installing server in /opt/Youtube-dl"
 
-    cd ~/
-    git clone https://github.com/JuicyPasta/Youtube-dl.git ./Youtube-dl
+    cd /opt
+    sudo rm -rf ./Youtube-dl
+    sudo git clone https://github.com/JuicyPasta/Youtube-dl.git ./Youtube-dl
     cd ./Youtube-dl
-    npm install
+    sudo npm install > /dev/null
+
+    sudo chmod +x youtube-dl-startup.sh
 
     echo "Configuring launchd"
-    mv com.github.youtube-dl.plist /Library/LaunchAgents/com.github.youtube-dl.plist
+    sudo mv com.github.youtube-dl.plist ~/Library/LaunchAgents/com.github.youtube-dl.plist
+
+    launchctl start com.github.youtube-dl.plist
 
     curl -k https://localhost:6299/ping
 
