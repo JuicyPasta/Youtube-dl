@@ -1,3 +1,3 @@
 #!/bin/bash
 
-forever start /opt/Youtube-dl/app.js
+forever start app.js > ~/Desktop/output.txt
