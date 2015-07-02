@@ -1,2 +1,3 @@
 #!/bin/bash
-node /opt/Youtube-dl/app.js
+
+forever start /opt/Youtube-dl/app.js

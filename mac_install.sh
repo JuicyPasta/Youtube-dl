@@ -24,8 +24,7 @@ if [ $OSTYPE = "darwin14" ]; then
     sudo rm -rf ./Youtube-dl
     sudo git clone https://github.com/JuicyPasta/Youtube-dl.git ./Youtube-dl
     cd ./Youtube-dl
-    sudo npm install > /dev/null
-
+    sudo npm install 2> /dev/null > /dev/null
     sudo chmod +x youtube-dl-startup.sh
 
     echo "Configuring launchd"
