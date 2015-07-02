@@ -6,6 +6,7 @@ var url = require('url');
 var path = require('path');
 var ffmpeg = require('fluent-ffmpeg');
 var child_process = require('child_process');
+var startStopDaemon = require('start-stop-daemon');
 
 var httpsOptions = {
     key: fs.readFileSync('./tls/key.pem'),
@@ -126,4 +127,4 @@ var server = function (port) { https.createServer(httpsOptions, function (req, r
 
 }).listen(port);};
 
-server(6299);
+startStopDaemon(server(6299));
