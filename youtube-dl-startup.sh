@@ -1,3 +1,3 @@
 #!/bin/bash
 
-forever start app.js > ~/Desktop/output.txt
+forever start ./app.js
