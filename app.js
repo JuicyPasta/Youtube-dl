@@ -13,7 +13,9 @@ var httpsOptions = {
     cert: fs.readFileSync('./tls/cert.pem')
 };
 
-var server = function (port) { https.createServer(httpsOptions, function (req, res) {
+var server = function (port) {
+
+    https.createServer(httpsOptions, function (req, res) {
     process.on('uncaughtException', function (err) {
         res.writeHead(200, {'Content-Type': 'text/html'});
         return res.end("There was some type of error :/");
@@ -40,7 +42,7 @@ var server = function (port) { https.createServer(httpsOptions, function (req, r
         inputPass = !inputPass;
     }
 
-    if (['lowest', 'highest', '1080p', '720p', '480p', '360p', '240p', '144p'].indexOf(quality) < 0 && quality){
+    if (['lowest', 'highest', '1080', '720', '480', '360', '240', '144'].indexOf(quality) < 0 && quality){
         res.write("quality is invalid\n");
         inputPass = !inputPass;
     }
@@ -66,6 +68,14 @@ var server = function (port) { https.createServer(httpsOptions, function (req, r
     console.log("inputTitle: " + inputTitle);
     console.log("link: " + link);
 
+    downloadSong(req, link, infoOptions);
+
+
+}).listen(port);};
+
+server(6299);
+
+function downloadSong (res, link, infoOptions){
     ytdl.getInfo(link, infoOptions, function(err, info){
         if (err){
             console.log('there was an error');
@@ -92,28 +102,30 @@ var server = function (port) { https.createServer(httpsOptions, function (req, r
         ytdl.downloadFromInfo(info, downloadOptions)
             .on('format', function(format){ // ytdl has decided on a format, lets start piping it and convert all of the data
 
-                // var output_path = path.join(location, title) + '.mp4';
-                // var output_stream = fs.createWriteStream(path.join(location, title) + '.mp4');
-
                 console.log(location);
 
-                var converter = child_process.spawn('ffmpeg', ['-i', 'pipe:0', '-q:a', '0', '-map', 'a', location]);
+
+                var args = ['-i', 'pipe:0', '-q:a', '0', '-map', 'a'];
+                //args.concat(['-metadata', 'artist=\"lmfao\"']);
+                //args.concat(['-f', filterType]);
+                args.push(location);
+                // args.concat(['-f', filterType]);
+                var converter = child_process.spawn('ffmpeg', args);
 
                 converter.stderr.pipe(process.stdout);
 
                 this.on('end', function() {
                     console.log('Finished processing');
-                    // fs.rename(location + '.part', location, function(err){
+                    fs.rename(location + '.part', location, function(err){
                         res.writeHead(200, {'Content-Type': 'text/html'});
                         res.end("video successfully downloaded");
-                    // });
+                    });
                 })
+
                 .on('error', function(err){
                     console.log(err);
                 })
                 .pipe(converter.stdin);
-
-
 
             })
             .on('error', function(err){
@@ -122,9 +134,12 @@ var server = function (port) { https.createServer(httpsOptions, function (req, r
                 return res.end("There was a problem downloading the video: " + title);
             })
             .pause();
-
     });
+}
 
-}).listen(port);};
+// startStopDaemon({
+//     outFile: '/Users/jackson/Desktop/out.txt',
+//     errFile: '/Users/jackson/Desktop/err.txt',
+//     cwd: '/Users/jackson/Documents/Youtube-dl'
+// }, server(6299));
 
-startStopDaemon(server(6299));
